@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>
+    Tags List
+    <a href="{% url 'todo:tag-create' %}" class="btn btn-primary link-to-page">Add</a>
+  </h1>
+  {% if tags_list %}
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+      {% for tag in tags_list %}
+        <tr>
+          <td>
+            {{ tag.name }}
+          </td>
+          <td>
+            <a href="{% url 'todo:tag-update' tag.id %}" class="btn btn-secondary">Update</a>
+          </td>
+          <td>
+            <a href="{% url 'todo:tag-delete' tag.id %}" class="btn btn-secondary">Delete</a>
+          </td>
+          <td>
+        </tr>
+      {% endfor %}
+    </table>
+
+  {% else %}
+    <p>No tags yet<a href="{% url 'todo:task-create' %}">Add your first task!</a></p>
+  {% endif %}
+{% endblock %}
