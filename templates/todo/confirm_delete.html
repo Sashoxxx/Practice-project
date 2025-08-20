@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1> Delete {{ verbose_name }}</h1>
+    <p> Are you sure you want to delete the {% if object.name %}{{ object.name }} {% else %} task {% endif %} from {{ verbose_name }}s?</p>
+    <form action="" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Confirm</button>
+      <a href="{{ back_url }}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}

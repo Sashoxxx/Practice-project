@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+  <h1>TODO list
+  <a class="link-to-page btn btn-primary" href="{% url 'todo:task-create' %}">Add task</a>
+  </h1>
+  {% for task in tasks %}
+    <div class="task">
+      <div class="task-title">
+        {{ task.content }}
+        <span class="{% if task.is_done %}status-done{% else %}status-not-done{% endif %}">
+          {% if task.is_done %}Done{% else %}Not done{% endif %}
+        </span>
+
+        {% if task.is_done %}
+          <form class="link-to-page" method="post" action="{% url 'todo:toggle-task' task.id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="undo-btn">Undo</button>
+          </form>
+        {% else %}
+          <form class="link-to-page" method="post" action="{% url 'todo:toggle-task' task.id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="complete-btn">Complete</button>
+          </form>
+        {% endif %}
+      </div>
+
+      <div class="task-meta">
+        Created: {{ task.created_at|date:"M d, Y, g:i a" }}
+        {% if task.deadline %}
+          Deadline: {{ task.deadline|date:"M d, Y, g:i a" }}
+        {% endif %}
+      </div>
+
+      <div>
+        Tags:
+        {% for tag in task.tags.all %}
+          <span class="tag">{{ tag.name }}</span>{% if not forloop.last %} {% endif %}
+        {% empty %}
+          <span class="tag">no tags</span>
+        {% endfor %}
+
+        <span class="task-actions">
+          <a href="{% url 'todo:task-update' task.id %}">Update</a>
+          <a href="{% url 'todo:task-delete' task.id %}">Delete</a>
+        </span>
+      </div>
+    </div>
+    <hr>
+    {% empty %}
+    <p>No tasks yet. <a href="{% url 'todo:task-create' %}">Add your first task!</a></p>
+  {% endfor %}
+</div>
+{% endblock %}
